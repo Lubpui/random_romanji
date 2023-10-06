@@ -84,9 +84,9 @@ const App = () => {
     };
 
     return (
-        <Box className="flex justify-center items-center h-[100vh] flex-col gap-4">
+        <Box className="flex justify-center items-center md:h-[100vh] flex-col-reverse md:flex-col gap-4 py-6">
             <Box className="flex gap-8 flex-col">
-                <Box className="flex gap-8">
+                <Box className="flex flex-col md:flex-row gap-8">
                     {(isAnswerHiragana || mode === "romaji") && (
                         <Box
                             onClick={() => {
@@ -103,13 +103,13 @@ const App = () => {
                                 setIsAnswerRomaji(false);
                                 setIsAnswerHiragana(false);
                             }}
-                            className="flex items-center justify-center bg-slate-200 rounded-3xl w-[600px] h-[600px] relative hover:bg-slate-100 cursor-pointer"
+                            className="flex items-center justify-center bg-slate-200 rounded-3xl w-[300px] h-[300px] md:w-[600px] md:h-[600px] relative hover:bg-slate-100 cursor-pointer"
                         >
-                            <Typography className="text-[500px] text-slate-600">
+                            <Typography className="text-[250px] md:text-[500px] text-slate-600">
                                 {randomWordIndex >= 0 &&
                                     word[randomWordIndex].romaji}
                             </Typography>
-                            <Typography className="text-lg font-bold text-slate-600 absolute top-6 right-6 group-hover:text-slate-400">
+                            <Typography className="text-sm md:text-lg font-bold text-slate-600 absolute top-6 right-6 group-hover:text-slate-400">
                                 {randomWordIndex >= 0
                                     ? word.findIndex(
                                           (item) =>
@@ -139,13 +139,13 @@ const App = () => {
                                     setIsAnswerHiragana(false);
                                 }
                             }}
-                            className="flex items-center justify-center bg-slate-200 rounded-3xl w-[600px] h-[600px] relative hover:bg-slate-100 cursor-pointer"
+                            className="flex items-center justify-center bg-slate-200 rounded-3xl w-[300px] h-[300px] md:w-[600px] md:h-[600px] relative hover:bg-slate-100 cursor-pointer"
                         >
-                            <Typography className="text-[500px] text-slate-600">
+                            <Typography className="text-[250px] md:text-[500px] text-slate-600">
                                 {randomWordIndex >= 0 &&
                                     word[randomWordIndex].hiragana}
                             </Typography>
-                            <Typography className="text-lg font-bold text-slate-600 absolute top-6 right-6 group-hover:text-slate-400">
+                            <Typography className="text-sm md:text-lg font-bold text-slate-600 absolute top-6 right-6 group-hover:text-slate-400">
                                 {randomWordIndex >= 0
                                     ? word.findIndex(
                                           (item) =>
@@ -159,7 +159,7 @@ const App = () => {
                 </Box>
             </Box>
 
-            <Box className="flex gap-4">
+            <Box className="flex gap-4 px-6 w-full overflow-x-auto md:justify-center">
                 {word.map((item, index) => (
                     <Box key={index} className="flex flex-col items-center">
                         <Typography>{index}</Typography>
@@ -172,56 +172,60 @@ const App = () => {
                     </Box>
                 ))}
             </Box>
-            <Box className="flex gap-6">
-                <Box
-                    onClick={() => setMode("romaji")}
-                    className="bg-blue-600 p-2 rounded-xl w-full text-center cursor-pointer hover:bg-blue-300"
-                >
-                    <Typography className="text-lg text-blue-100">
-                        Romaji
-                    </Typography>
+
+            <Box className="flex flex-row md:flex-col gap-4 items-center">
+                <Box className="flex gap-4">
+                    <Box
+                        onClick={() => setMode("romaji")}
+                        className="bg-blue-600 p-2 rounded-xl w-full text-center cursor-pointer hover:bg-blue-300"
+                    >
+                        <Typography className="text-lg text-blue-100">
+                            Romaji
+                        </Typography>
+                    </Box>
+                    <Box
+                        onClick={() => setMode("hiragana")}
+                        className="bg-blue-600 p-2 rounded-xl w-full text-center cursor-pointer hover:bg-blue-300"
+                    >
+                        <Typography className="text-lg text-blue-100">
+                            Hiragana
+                        </Typography>
+                    </Box>
                 </Box>
-                <Box
-                    onClick={() => setMode("hiragana")}
-                    className="bg-blue-600 p-2 rounded-xl w-full text-center cursor-pointer hover:bg-blue-300"
-                >
-                    <Typography className="text-lg text-blue-100">
-                        Hiragana
-                    </Typography>
+
+                <Box className="flex gap-4">
+                    <Button
+                        onClick={handleChangeAnswer}
+                        className="bg-green-400 rounded-xl hover:bg-green-100 group"
+                    >
+                        <Typography className="text-lg normal-case text-green-50 group-hover:text-green-400">
+                            Answer
+                        </Typography>
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            deleteByIndex(randomWordIndex);
+
+                            const randomNumber = Math.floor(
+                                Math.random() * word.length
+                            );
+
+                            if (randomNumber >= word.length - 1) {
+                                setRandomWordIndex(randomNumber - 1);
+                            } else {
+                                setRandomWordIndex(randomNumber);
+                            }
+
+                            setIsAnswerHiragana(false);
+                            setIsAnswerRomaji(false);
+                        }}
+                        className="bg-red-400 rounded-xl hover:bg-red-100 group"
+                    >
+                        <Typography className="text-lg normal-case text-red-50 group-hover:text-red-400">
+                            Check
+                        </Typography>
+                    </Button>
                 </Box>
-            </Box>
-            <Box className="flex gap-4">
-                <Button
-                    onClick={handleChangeAnswer}
-                    className="bg-green-400 rounded-xl hover:bg-green-100 group"
-                >
-                    <Typography className="text-lg normal-case text-green-50 group-hover:text-green-400">
-                        Answer
-                    </Typography>
-                </Button>
-                <Button
-                    onClick={() => {
-                        deleteByIndex(randomWordIndex);
-
-                        const randomNumber = Math.floor(
-                            Math.random() * word.length
-                        );
-
-                        if (randomNumber >= word.length - 1) {
-                            setRandomWordIndex(randomNumber - 1);
-                        } else {
-                            setRandomWordIndex(randomNumber);
-                        }
-
-                        setIsAnswerHiragana(false);
-                        setIsAnswerRomaji(false);
-                    }}
-                    className="bg-red-400 rounded-xl hover:bg-red-100 group"
-                >
-                    <Typography className="text-lg normal-case text-red-50 group-hover:text-red-400">
-                        Check
-                    </Typography>
-                </Button>
             </Box>
         </Box>
     );
